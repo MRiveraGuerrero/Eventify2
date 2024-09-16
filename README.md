@@ -1,5 +1,5 @@
 # Integrantes 
-Imanol Martínez, Mikel Rivera, Diego Nido, Unax Zardoya
+Ander Gorocica, Mikel Rivera, Diego Nido, Unax Zardoya
 
 # Docker LAMP
 Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
