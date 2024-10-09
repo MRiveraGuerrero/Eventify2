@@ -121,12 +121,16 @@ body{
 .nombreUsuarioEvento{
     margin-left: 10px;
     max-width: 70%;
+    font-family: var(--font-family);
+    color: var(--color2);
+    font-weight: bold;
 }
 .descripcionEvento{
     margin: 20px 100px 20px 100px;
     max-width: 70%;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    font-family: var(--font-family);
 }
 .tituloInicio{
     justify-self: center;
