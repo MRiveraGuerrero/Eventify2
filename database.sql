@@ -162,6 +162,13 @@ CREATE TABLE `block` (
 
 
 
+DROP TABLE IF EXISTS `follows`;
+CREATE TABLE `follows` (
+  `usuarioSeguidor` varchar(50) NOT NULL,
+  `usuarioSeguido` varchar(50) NOT NULL,
+  PRIMARY KEY (`usuarioSeguidor`, `usuarioSeguido`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Filtros para la tabla `accesos`
 --
