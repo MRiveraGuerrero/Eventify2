@@ -39,12 +39,6 @@
           $usuario = "invitado";
         }
 
-        $query = "SELECT * FROM usuarios WHERE usuario = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $usuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
         include("navbar.php");
         echo '<!DOCTYPE html>
         <html>
@@ -64,57 +58,97 @@
             <div class="page">
               <div class="cabecera">
                 <img class="imagenSV" src="imagenes/logoSV.png"></img>
-                <h1 class="tituloInicio">Editar Perfil</h1>
+                <h1 class="tituloInicio">Perfil</h1>
                 <img class="imagenWIP" src="imagenes/logoWIP.png"></img>
               </div>';
-        while ($row = $result->fetch_assoc()) {
-          echo '<div class="formbox">
-                  <div class="form-title">
-                      Mi Perfil
-                  </div>
-                  <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
-                  <form class="form" action="/submit.php" id="form-registro" method="POST">
-                      <div class="linea-form">
-                          <p>Nombre de usuario: '.htmlspecialchars($row['usuario'], ENT_QUOTES).'</p>
-                      </div>
-                      <div class="linea-form">
-                          <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
-                          <input type="text" name="nombre" value="'.htmlspecialchars($row['nombre'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
-                          <input type="text" name="telefono" value="'.htmlspecialchars($row['telef'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>DNI: '.htmlspecialchars($row['dni'], ENT_QUOTES).' </p>
-                          <input type="text" name="dni" value="'.htmlspecialchars($row['dni'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>
-                          <input type="email" name="email" value="'.htmlspecialchars($row['email'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Nacimiento: '.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'</p>
-                          <input type="date" name="nacimiento" value="'.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Contraseña </p>
-                          <input type="password" name="passwd" value="">
-                      </div>
-                      <div class="linea-form">
-                          <input type="hidden" value="edit" name="tiporegistro">
-                          <p>
-                          <button type="submit" class="boton" id="botonPerfil">Editar</button>
-                          </p>                  
-                      </div>
-                      <input type="hidden" name="token" value="'.$_SESSION['token'].'">
-                  </form>
-              </div>';
+        $otro_usuario = $usuario;
+        if (isset($_GET["usuario"])) {
+          $otro_usuario = $_GET["usuario"];
+          $query = "SELECT * FROM usuarios WHERE usuario = ?";
+          $stmt = $conn->prepare($query);
+          $stmt->bind_param("s", $otro_usuario);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          while ($row = $result->fetch_assoc()) {
+            echo '<div class="formbox">
+                    <div class="form-title">
+                        Perfil de '.htmlspecialchars($row['usuario'], ENT_QUOTES). '
+                    </div>
+                    <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
+                    <form class="form">
+                        <div class="linea-form">
+                            <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>DNI: '.htmlspecialchars($row['dni'], ENT_QUOTES).' </p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Nacimiento: '.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'</p>
+                        </div>
+                    </form>
+                </div>';
+          }
+        } else {
+          $query = "SELECT * FROM usuarios WHERE usuario = ?";
+          $stmt = $conn->prepare($query);
+          $stmt->bind_param("s", $usuario);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          while ($row = $result->fetch_assoc()) {
+            echo '<div class="formbox">
+                    <div class="form-title">
+                        Mi Perfil
+                    </div>
+                    <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
+                    <form class="form" action="/submit.php" id="form-registro" method="POST">
+                        <div class="linea-form">
+                            <p>Nombre de usuario: '.htmlspecialchars($row['usuario'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
+                            <input type="text" name="nombre" value="'.htmlspecialchars($row['nombre'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
+                            <input type="text" name="telefono" value="'.htmlspecialchars($row['telef'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>DNI: '.htmlspecialchars($row['dni'], ENT_QUOTES).' </p>
+                            <input type="text" name="dni" value="'.htmlspecialchars($row['dni'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>
+                            <input type="email" name="email" value="'.htmlspecialchars($row['email'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Nacimiento: '.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'</p>
+                            <input type="date" name="nacimiento" value="'.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Contraseña </p>
+                            <input type="password" name="passwd" value="">
+                        </div>
+                        <div class="linea-form">
+                            <input type="hidden" value="edit" name="tiporegistro">
+                            <p>
+                            <button type="submit" class="boton" id="botonPerfil">Editar</button>
+                            </p>                  
+                        </div>
+                        <input type="hidden" name="token" value="'.$_SESSION['token'].'">
+                    </form>
+                </div>';
+          }
         }
 
         $query = "SELECT * FROM eventos WHERE usuario = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $usuario);
+        $stmt->bind_param("s", $otro_usuario);
         $stmt->execute();
         $result = $stmt->get_result();
 
