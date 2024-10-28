@@ -30,6 +30,7 @@
       <a class="linkInicio" href="/">Inicio</a>
       <a class="linkInicio" href="/crearEvento.php">Crear Evento</a>
       <a class="linkInicio" href="/editarPost.php">Editar Evento</a>
+      <a class="linkInicio" href="/chat.php">Chat</a>
     </div>
     <li>
       '.$perfil.'

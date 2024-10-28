@@ -83,8 +83,7 @@ CREATE TABLE `usuarios` (
   `nacimiento` date NOT NULL,
   `usuario` varchar(50) NOT NULL,
   `passwd` varchar(255) NOT NULL,
-  `sal` varchar(50) NOT NULL,
-  `cookie` varchar(50) NOT NULL
+  `sal` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -169,6 +168,18 @@ CREATE TABLE `follows` (
   PRIMARY KEY (`usuarioSeguidor`, `usuarioSeguido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `mensajes`;
+CREATE TABLE `mensajes` (
+  `usuarioA` varchar(50) NOT NULL,
+  `usuarioB` varchar(50) NOT NULL,
+  `mensaje` varchar(255) NOT NULL,
+  `fecha` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `mensajes`
+  ADD PRIMARY KEY (`usuarioA`, `usuarioB`, `fecha`);
+COMMIT;
+
 --
 -- Filtros para la tabla `accesos`
 --
@@ -208,7 +219,6 @@ ADD CONSTRAINT `fk_usuarioSeguido` FOREIGN KEY (`usuarioSeguido`) REFERENCES `us
 ALTER TABLE `block`
 ADD CONSTRAINT `fk_usuarioBloqueador` FOREIGN KEY (`usuarioBloqueador`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE,
 ADD CONSTRAINT `fk_usuarioBloqueado` FOREIGN KEY (`usuarioBloqueado`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
