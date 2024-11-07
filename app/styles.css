@@ -172,3 +172,17 @@ body{
     overflow: hidden;
     white-space: nowrap;
 }
+
+.material-symbols-outlined {
+    font-size: 24px; /* Tamaño del icono */
+    transition: color 0.3s ease; /* Transición para el cambio de color */
+  }
+  
+.botonLike.liked .material-symbols-outlined {
+color: red; /* Rojo cuando está activado */
+}
+
+.botonLike .material-symbols-outlined {
+color: red; /* Gris cuando no está activado */
+}
+  

@@ -57,7 +57,7 @@
                 }
 
                 if($es_edit != "edit"){
-                    $consulta = "INSERT INTO eventos VALUES(?, ?, ?, ?, ?, ?, ?)";
+                    $consulta = "INSERT INTO eventos VALUES(?, ?, ?, ?, ?, ?, ?, 0)";
                     $tipos = "sssssss";
                     $parametros = array($usuario, $titulo , $enunciado, $opcion1, $resultado1, $opcion2, $resultado2);
                     $mensaje = "Evento creado";
