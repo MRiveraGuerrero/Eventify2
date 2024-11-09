@@ -15,5 +15,5 @@ RUN groupmod -g 1000 www-data
 COPY ./app /var/www/html/app
 
 # Cambiar permisos y propietario después de copiar los archivos
-RUN chmod -R 755 /var/www/html/app
-RUN chown -R www-data:www-data /var/www/html/app
+#RUN chmod -R 755 /var/www/html/app
+#RUN chown -R www-data:www-data /var/www/html/app

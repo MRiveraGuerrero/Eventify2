@@ -172,11 +172,13 @@ body{
     transition: color 0.3s ease; /* Transición para el cambio de color */
   }
   
-.botonLike.liked .material-symbols-outlined {
-color: red; /* Rojo cuando está activado */
+.botonLike .material-symbols-outlined {
+    color: gray; /* Gris cuando no está activado */
+    transition: color 0.3s ease; /* Transición suave para el cambio de color */
 }
 
-.botonLike .material-symbols-outlined {
-color: red; /* Gris cuando no está activado */
+/* Estilo para el icono del corazón cuando está "likeado" (rojo) */
+.botonLike.liked .material-symbols-outlined {
+    color: red; /* Rojo cuando está activado */
 }
-  
+
