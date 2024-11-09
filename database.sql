@@ -136,6 +136,16 @@ CREATE TABLE `likes` (
   PRIMARY KEY (`usuarioCreador`, `tituloEv`, `usuarioLike`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `comentarios`;
+CREATE TABLE `comentarios` (
+  `usuarioCreador` varchar(50) NOT NULL,
+  `tituloEv` varchar(255) NOT NULL,
+  `usuarioComent` varchar(50) NOT NULL,
+  `fechaHora` datetime NOT NULL,
+  `comentario` varchar(1000) NOT NULL,
+  PRIMARY KEY (`usuarioCreador`, `tituloEv`, `usuarioComent`, `fechaHora`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Filtros para la tabla `accesos`

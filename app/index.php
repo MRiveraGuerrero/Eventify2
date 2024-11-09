@@ -22,7 +22,6 @@
         </div>
         
         <?php
-          // Conexión a la base de datos
           $hostname = "db";
           $username = "admin";
           $password = "test";
@@ -36,14 +35,18 @@
           $query = mysqli_query($conn, "SELECT * FROM eventos") or die(mysqli_error($conn));
 
           while ($row = mysqli_fetch_array($query)) {
-            // Verificar si el usuario ha dado like al evento
-            $usuarioLikeado = false; // Asume que no ha dado like
-            $checkLikeQuery = mysqli_query($conn, "SELECT * FROM likes WHERE usuario = '".htmlspecialchars($usuario, ENT_QUOTES)."' AND evento_id = ".(int)$row['id']);
-            if (mysqli_num_rows($checkLikeQuery) > 0) {
-                $usuarioLikeado = true; // Si hay resultado, el usuario ya dio like
+            $usuarioLikeado = false;
+
+            $checkLikeQuery = mysqli_query($conn, "SELECT * FROM likes WHERE usuarioLike = '".htmlspecialchars($usuario, ENT_QUOTES)."' AND tituloEv = '".htmlspecialchars($row['titulo'], ENT_QUOTES)."' AND usuarioCreador = '".htmlspecialchars($row['usuario'], ENT_QUOTES)."'");
+
+            if (!$checkLikeQuery) {
+                echo "Error en la consulta: " . mysqli_error($conn);
             }
 
-            // Mostrar cada evento
+            if (mysqli_num_rows($checkLikeQuery) > 0) {
+                $usuarioLikeado = true;
+            }
+
             echo "
             <div class='evento'>
                 <div class='barraUsuario'>
@@ -52,18 +55,21 @@
                 <h2 class='tituloEvento no-overflow'>" .htmlspecialchars($row['titulo'], ENT_QUOTES)."</h2>
                 <p class='descripcionEvento'>".htmlspecialchars($row['enunciado'], ENT_QUOTES)."</p>
 
-                <!-- Formulario de Likes -->
                 <form method='POST' action='likeEvento.php'>
                   <input type='hidden' name='usuarioLike' value='".htmlspecialchars($usuario, ENT_QUOTES)."'>
                   <input type='hidden' name='usuario' value='".htmlspecialchars($row['usuario'], ENT_QUOTES)."'>
                   <input type='hidden' name='titulo' value='".htmlspecialchars($row['titulo'], ENT_QUOTES)."'>
-                  <input type='hidden' name='evento_id' value='".htmlspecialchars($row['id'], ENT_QUOTES)."'>
                   
                   <button type='submit' class='botonLike ".($usuarioLikeado ? "liked" : "")."'>
-                      <span class='material-symbols-outlined'>favorite</span>  <!-- Corazón -->
+                      <span class='material-symbols-outlined'>favorite</span>
                       <span>" . $row['likes'] . " Likes</span>
                   </button>
                 </form>
+
+                <a href='comentarios.php?usuario=".urlencode($row['usuario'])."&titulo=".urlencode($row['titulo'])."' class='botonComentarios'>
+                    <span class='material-symbols-outlined'>comment</span>
+                    <span>Comentarios</span>
+                </a>
             </div>";
           }
           mysqli_close($conn);
