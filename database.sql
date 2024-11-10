@@ -146,6 +146,21 @@ CREATE TABLE `comentarios` (
   PRIMARY KEY (`usuarioCreador`, `tituloEv`, `usuarioComent`, `fechaHora`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `follows`;
+CREATE TABLE `follows` (
+  `usuarioSeguidor` varchar(50) NOT NULL,
+  `usuarioSeguido` varchar(50) NOT NULL,
+  PRIMARY KEY (`usuarioSeguidor`, `usuarioSeguido`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `block`;
+CREATE TABLE `block` (
+  `usuarioBloqueador` varchar(50) NOT NULL,
+  `usuarioBloqueado` varchar(50) NOT NULL,
+  PRIMARY KEY (`usuarioBloqueador`, `usuarioBloqueado`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 --
 -- Filtros para la tabla `accesos`
