@@ -167,6 +167,40 @@ CREATE TABLE `block` (
 --
 ALTER TABLE `accesos`
   ADD CONSTRAINT `accesos_ibfk_1` FOREIGN KEY (`usuario`) REFERENCES `usuarios` (`usuario`);
+
+--
+-- Filtros para la tabla `likes`
+--
+
+ALTER TABLE `likes`
+ADD CONSTRAINT `fk_usuarioCreador` FOREIGN KEY (`usuarioCreador`) REFERENCES `eventos`(`usuario`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_tituloEv` FOREIGN KEY (`tituloEv`) REFERENCES `eventos`(`titulo`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_usuarioLike` FOREIGN KEY (`usuarioLike`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `comentarios`
+--
+
+ALTER TABLE `comentarios`
+ADD CONSTRAINT `fk_usuarioCreador` FOREIGN KEY (`usuarioCreador`) REFERENCES `eventos`(`usuario`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_tituloEv` FOREIGN KEY (`tituloEv`) REFERENCES `eventos`(`titulo`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_usuarioComent` FOREIGN KEY (`usuarioComent`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `follows`
+--
+
+ALTER TABLE `follows`
+ADD CONSTRAINT `fk_usuarioSeguidor` FOREIGN KEY (`usuarioSeguidor`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_usuarioSeguido` FOREIGN KEY (`usuarioSeguido`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `block`
+--
+
+ALTER TABLE `block`
+ADD CONSTRAINT `fk_usuarioBloqueador` FOREIGN KEY (`usuarioBloqueador`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_usuarioBloqueado` FOREIGN KEY (`usuarioBloqueado`) REFERENCES `usuarios`(`usuario`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
