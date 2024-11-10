@@ -88,19 +88,6 @@ body{
     border-radius: 50%;
 }
 
-.evento{
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: space-evenly;
-    align-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 10px ;
-    background-color: var(--color1);
-    border-radius: 20px;
-    box-shadow: 0 0 20px 1px var(--color2);
-    border: 1px solid var(--color2);
-}
 .barraUsuario{
     display: flex;
     width: 100%;
