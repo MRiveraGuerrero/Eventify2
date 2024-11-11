@@ -69,6 +69,28 @@
           $stmt->bind_param("s", $otro_usuario);
           $stmt->execute();
           $result = $stmt->get_result();
+          $stmt->close();
+          $querySeguidos = "SELECT COUNT(*) AS totalSeguidos FROM follows WHERE usuarioSeguidor = ?";
+          $querySeguidores = "SELECT COUNT(*) AS totalSeguidores FROM follows WHERE usuarioSeguido = ?";
+
+          $stmtSeguidos = $conn->prepare($querySeguidos);
+          $stmtSeguidos->bind_param("s", $otro_usuario);
+          $stmtSeguidos->execute();
+          $resultSeguidos = $stmtSeguidos->get_result();
+          $seguidosCount = $resultSeguidos->fetch_assoc()['totalSeguidos'];
+
+
+          
+          $stmtSeguidores = $conn->prepare($querySeguidores);
+          $stmtSeguidores->bind_param("s", $otro_usuario);
+          $stmtSeguidores->execute();
+          $resultSeguidores = $stmtSeguidores->get_result();
+          $seguidoresCount = $resultSeguidores->fetch_assoc()['totalSeguidores'];
+
+          $stmtSeguidos->close();
+          $stmtSeguidores->close();
+          
+          
           while ($row = $result->fetch_assoc()) {
             echo '<div class="formbox">
                     <div class="form-title">
@@ -76,6 +98,36 @@
                     </div>
                     <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
                     <form class="form">
+                        <div class="contador-seguimiento">
+                          <p>Personas que sigue: ' . htmlspecialchars($seguidosCount, ENT_QUOTES) . '</p>
+                          <p>Seguidores: ' . htmlspecialchars($seguidoresCount, ENT_QUOTES) . '</p>
+                        </div>
+                        <div class="linea-form">
+                            <button type="button" class="boton" id="botonSeguir">
+                              Seguir
+                            </button>
+                            <script>
+                              function toggleFollow(usuarioSeguido) {
+                                // Realiza una llamada AJAX para seguir o dejar de seguir
+                                var xhttp = new XMLHttpRequest();
+                                xhttp.open("POST", "seguir.php", true);
+                                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                                xhttp.onreadystatechange = function() {
+                                  if (this.readyState == 4 && this.status == 200) {
+                                    var response = JSON.parse(this.responseText);
+                                    if (response.status === "seguido") {
+                                      alert("Ahora estás siguiendo a " + usuarioSeguido);
+                                      document.getElementById("botonSeguir").innerText = "Dejar de seguir";
+                                    } else if (response.status === "dejado") {
+                                      alert("Has dejado de seguir a " + usuarioSeguido);
+                                      document.getElementById("botonSeguir").innerText = "Seguir";
+                                    }
+                                  }
+                                };
+                                xhttp.send("usuarioSeguido=" + usuarioSeguido);
+                              }
+                            </script>
+                        </div>
                         <div class="linea-form">
                             <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
                         </div>
@@ -94,6 +146,7 @@
                     </form>
                 </div>';
           }
+          $result->free();
         } else {
           $query = "SELECT * FROM usuarios WHERE usuario = ?";
           $stmt = $conn->prepare($query);
@@ -176,5 +229,35 @@
       ?>
       <script src="perfil.js"></script>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var botonSeguir = document.getElementById('botonSeguir');
+        if (botonSeguir) {
+          botonSeguir.addEventListener('click', function() {
+            toggleFollow('<?php echo htmlspecialchars($otro_usuario, ENT_QUOTES); ?>');
+          });
+        }
+      });
+
+      function toggleFollow(usuarioSeguido) {
+        // Realiza una llamada AJAX para seguir o dejar de seguir
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "seguir.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            if (response.status === "seguido") {
+              alert("Ahora estás siguiendo a " + usuarioSeguido);
+              document.getElementById("botonSeguir").innerText = "Dejar de seguir";
+            } else if (response.status === "dejado") {
+              alert("Has dejado de seguir a " + usuarioSeguido);
+              document.getElementById("botonSeguir").innerText = "Seguir";
+            }
+          }
+        };
+        xhttp.send("usuarioSeguido=" + encodeURIComponent(usuarioSeguido));
+      }
+    </script>
   </body>
 </html>
