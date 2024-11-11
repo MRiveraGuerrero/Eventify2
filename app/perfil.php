@@ -229,35 +229,5 @@
       ?>
       <script src="perfil.js"></script>
     </div>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var botonSeguir = document.getElementById('botonSeguir');
-        if (botonSeguir) {
-          botonSeguir.addEventListener('click', function() {
-            toggleFollow('<?php echo htmlspecialchars($otro_usuario, ENT_QUOTES); ?>');
-          });
-        }
-      });
-
-      function toggleFollow(usuarioSeguido) {
-        // Realiza una llamada AJAX para seguir o dejar de seguir
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "seguir.php", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(this.responseText);
-            if (response.status === "seguido") {
-              alert("Ahora estás siguiendo a " + usuarioSeguido);
-              document.getElementById("botonSeguir").innerText = "Dejar de seguir";
-            } else if (response.status === "dejado") {
-              alert("Has dejado de seguir a " + usuarioSeguido);
-              document.getElementById("botonSeguir").innerText = "Seguir";
-            }
-          }
-        };
-        xhttp.send("usuarioSeguido=" + encodeURIComponent(usuarioSeguido));
-      }
-    </script>
   </body>
 </html>
