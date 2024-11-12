@@ -57,7 +57,8 @@ CREATE TABLE `eventos` (
   `resultado1` varchar(255) NOT NULL,
   `opcion2` varchar(255) NOT NULL,
   `resultado2` varchar(255) NOT NULL,
-  `likes` int(10) NOT NULL DEFAULT 0
+  `likes` int(10) NOT NULL DEFAULT 0,
+  `fecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
