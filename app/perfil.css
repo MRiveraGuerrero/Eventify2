@@ -74,6 +74,8 @@
     border: none;
     font-size: 25px;
     display: table-cell;
+    text-decoration: none;
+    padding: 2px;
 }
 
 .botones{

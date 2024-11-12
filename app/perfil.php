@@ -79,6 +79,11 @@
                         <div class="linea-form">
                             <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
                         </div>
+                        <div class="linea-form">
+                          <div>
+                            <a class="boton" href="/chat.php?chat_with='.htmlspecialchars($row['usuario'], ENT_QUOTES).'">Enviar mensaje</a>
+                          </div>
+                        </div>
                     </form>
                 </div>';
           }
