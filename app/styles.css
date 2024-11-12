@@ -6,7 +6,12 @@
 }
 
 body{
-    margin: 0 0;
+    margin: 30px 0;
+    font-family: var(--font-family);
+}
+
+a{
+    text-decoration: none;
 }
 
 .navbar{
