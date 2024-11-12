@@ -188,3 +188,45 @@ body{
     color: red; /* Rojo cuando está activado */
 }
 
+.page .ordenamiento {
+    margin: 20px 3%;
+    max-width: 600px;
+    text-align: left;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.page .form-ordenamiento {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-family);
+}
+
+.page .form-ordenamiento select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--color2);
+    background-color: white;
+    cursor: pointer;
+    font-family: var(--font-family);
+}
+
+.page .form-ordenamiento label {
+    color: var(--color2);
+    font-weight: bold;
+    font-family: var(--font-family);
+}
+
+/* Estilo hover para el select */
+.page .form-ordenamiento select:hover {
+    border-color: #ff9100;
+}
+
+/* Estilo para las opciones del select */
+.page .form-ordenamiento select option {
+    padding: 8px;
+    font-family: var(--font-family);
+}
