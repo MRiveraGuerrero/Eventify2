@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     </head>
     <body>
-
       <div class="page">
         <div class="cabecera">
           <img class="imagenSV" src="imagenes/logoSV.png" alt="Logo SV">
@@ -71,11 +70,17 @@
                     <span class='material-symbols-outlined'>comment</span>
                     <span>Comentarios</span>
                 </a>
+                <input type='hidden' class='opcion1' value='".htmlspecialchars($row['opcion1'], ENT_QUOTES)."'>
+                <input type='hidden' class='resultado1' value='".htmlspecialchars($row['resultado1'], ENT_QUOTES)."'>
+                <input type='hidden' class='opcion2' value='".htmlspecialchars($row['opcion2'], ENT_QUOTES)."'>
+                <input type='hidden' class='resultado2' value='".htmlspecialchars($row['resultado2'], ENT_QUOTES)."'>
+                <span class='botonDescarga'> <img src='./imagenes/download.svg' width='25' height='25' alt='descargar'></span>
             </div>";
           }
           mysqli_close($conn);
         ?>
 
       </div>
+      <script src="index.js"></script>
     </body>
 </html>

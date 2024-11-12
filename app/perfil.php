@@ -166,6 +166,7 @@
         $conn->close();
       ?>
       <script src="perfil.js"></script>
+      <script src="index.js"></script>
     </div>
   </body>
 </html>
