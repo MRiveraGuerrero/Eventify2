@@ -78,6 +78,18 @@
     padding: 2px;
 }
 
+.eliminar{
+    border-radius: 10px;
+    font-family: var(--font-family);
+    color: var(--color1);
+    border: none;
+    font-size: 25px;
+    display: table-cell;
+    text-decoration: none;
+    padding: 2px;
+    background-color: red;
+}
+
 .botones{
     width: 100%;
     display: table-row;

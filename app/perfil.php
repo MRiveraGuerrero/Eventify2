@@ -125,8 +125,10 @@
                         </div>
                         <div class="linea-form">
                             <input type="hidden" value="edit" name="tiporegistro">
+                            <input type="hidden" value="false" id="eliminar" name="eliminar">
                             <p>
                             <button type="submit" class="boton" id="botonPerfil">Editar</button>
+                            <button type="submit" class="eliminar" id="botonEliminar">Eliminar</button>
                             </p>                  
                         </div>
                         <input type="hidden" name="token" value="'.$_SESSION['token'].'">

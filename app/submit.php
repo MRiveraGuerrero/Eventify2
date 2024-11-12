@@ -244,23 +244,41 @@
                     if (!$error){
                         $viejoUsuario = getUsuarioCookie();
 
-                        $consulta = "UPDATE usuarios SET nombre = ?, telef = ?, email = ?, nacimiento = ?, passwd = ?, sal = ? WHERE usuario = ?";
-                        $tipos = "sisssss";
-                        $sal = bin2hex(random_bytes(16));
-                        $contraseñaSal = $sal . $passwd;
-                        $contraseña = password_hash($contraseñaSal, PASSWORD_BCRYPT);
-                        $parametros = array($nombre, (int) $telef, $email, $nacimiento, $contraseña, $sal, $viejoUsuario);
-                        if($stmt = mysqli_prepare($conn, $consulta)){
-                            $stmt->bind_param($tipos, ...$parametros);
-                            if($stmt->execute()){
+                        $eliminar = $_POST["eliminar"];
+                        if ($eliminar == 'true') {
+                            $consulta = "DELETE FROM usuarios WHERE usuario = ?";
+                            $tipos = "s";
+                            $parametros = array($viejoUsuario);
+                            if($stmt = mysqli_prepare($conn, $consulta)){
+                                $stmt->bind_param($tipos, ...$parametros);
+                                if($stmt->execute()){
 
-                                $mensaje = "Usuario editado";
-                                setCookieUsuarioSegura($viejoUsuario);
+                                    header('Location: /logout.php');
+                                    die();
+                                } 
+                                else $mensaje = "Error al eliminar";
+                                $stmt->close();
+                            }
+                        } else {
+                            $consulta = "UPDATE usuarios SET nombre = ?, telef = ?, email = ?, nacimiento = ?, passwd = ?, sal = ? WHERE usuario = ?";
+                            $tipos = "sisssss";
+                            $sal = bin2hex(random_bytes(16));
+                            $contraseñaSal = $sal . $passwd;
+                            $contraseña = password_hash($contraseñaSal, PASSWORD_BCRYPT);
+                            $parametros = array($nombre, (int) $telef, $email, $nacimiento, $contraseña, $sal, $viejoUsuario);
+                            if($stmt = mysqli_prepare($conn, $consulta)){
+                                $stmt->bind_param($tipos, ...$parametros);
+                                if($stmt->execute()){
 
-                            } 
-                            else $mensaje = "Error al editar";
-                            $stmt->close();
+                                    $mensaje = "Usuario editado";
+                                    setCookieUsuarioSegura($viejoUsuario);
+
+                                } 
+                                else $mensaje = "Error al editar";
+                                $stmt->close();
+                            }
                         }
+
                     }else{
                         $ipAddress = $_SERVER['REMOTE_ADDR'];
                         logFailedSignUpAttempt($usuario, $ipAddress, $motivo, "edit");

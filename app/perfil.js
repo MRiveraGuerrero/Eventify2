@@ -29,6 +29,13 @@ function init(){
             form.submit()
         }
     })
+    document.getElementById("botonEliminar").addEventListener("click", () => {
+        event.preventDefault();
+        var eliminar = document.getElementById("eliminar")
+        eliminar.value = true
+        var form = document.getElementById("form-registro")
+        form.submit()
+    })
 }
 
     function comprobarTelefono(telefono){
