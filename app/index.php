@@ -75,7 +75,17 @@
           }
           mysqli_close($conn);
         ?>
-
       </div>
+      <div class="ordenamiento">
+          <form method="GET" class="form-ordenamiento">
+              <label for="orden">Ordenar por:</label>
+              <select name="orden" id="orden" onchange="this.form.submit()">
+                  <option value="reciente" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'reciente') ? 'selected' : ''; ?>>Más recientes</option>
+                  <option value="likes" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'likes') ? 'selected' : ''; ?>>Más likes</option>
+                  <option value="alfabetico" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'alfabetico') ? 'selected' : ''; ?>>Alfabético</option>
+                  <option value="comentarios" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'comentarios') ? 'selected' : ''; ?>>Más comentados</option>
+              </select>
+          </form>
+        </div>
     </body>
 </html>
