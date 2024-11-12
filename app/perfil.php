@@ -79,18 +79,6 @@
                         <div class="linea-form">
                             <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
                         </div>
-                        <div class="linea-form">
-                            <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
-                        </div>
-                        <div class="linea-form">
-                            <p>DNI: '.htmlspecialchars($row['dni'], ENT_QUOTES).' </p>
-                        </div>
-                        <div class="linea-form">
-                            <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>
-                        </div>
-                        <div class="linea-form">
-                            <p>Nacimiento: '.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'</p>
-                        </div>
                     </form>
                 </div>';
           }
@@ -117,10 +105,6 @@
                         <div class="linea-form">
                             <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
                             <input type="text" name="telefono" value="'.htmlspecialchars($row['telef'], ENT_QUOTES).'">
-                        </div>
-                        <div class="linea-form">
-                            <p>DNI: '.htmlspecialchars($row['dni'], ENT_QUOTES).' </p>
-                            <input type="text" name="dni" value="'.htmlspecialchars($row['dni'], ENT_QUOTES).'">
                         </div>
                         <div class="linea-form">
                             <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>

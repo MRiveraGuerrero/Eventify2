@@ -6,7 +6,6 @@ function init(){
         var aceptado = true
         var nombre = document.getElementsByName("nombre")[0]?.value
         var telefono = document.getElementsByName("telefono")[0]?.value
-        var dni = document.getElementsByName("dni")[0]?.value
         var email = document.getElementsByName("email")[0]?.value
         var nacimiento = document.getElementsByName("nacimiento")[0]?.value
         var usuario = document.getElementsByName("usuario")[0]?.value
@@ -15,8 +14,6 @@ function init(){
         aceptado = aceptado && comprobarNombre(nombre)
 
         aceptado = aceptado && comprobarTelefono(telefono)
-
-        aceptado = aceptado && validarDNI(dni)
 
         aceptado = aceptado && comprobarEmail(email)
 
@@ -94,32 +91,6 @@ function init(){
         alert("El usuario debe incluir solo números y letras")
         return false
     }
-    }
-
-    function validarDNI(dni) {
-    // Expresión regular para validar el formato correcto del DNI
-    const dniRegex = /^(\d{8})-([A-Z])$/;
-
-    // Verificar si el DNI coincide con el formato esperado
-    if (!dniRegex.test(dni)) {
-        alert("Formato de DNI no válido")
-        return false;
-    }
-
-    // Extraer el número y la letra del DNI
-    const [, numero, letra] = dni.match(dniRegex);
-
-    // Array con las letras posibles en un DNI
-    const letrasPosibles = 'TRWAGMYFPDXBNJZSQVHLCKE';
-
-    // Calcular la letra correcta según el número
-    const letraCalculada = letrasPosibles[numero % 23];
-
-    // Comparar la letra calculada con la letra proporcionada
-    if(letra !== letraCalculada){
-        alert("La letra del DNI no es correcta")
-    }
-    return letra === letraCalculada;
     }
 
 

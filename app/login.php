@@ -75,10 +75,6 @@
                     <p>Teléfono: 123456789</p>
                     <input type="text" name="telefono">
                 </div>
-                <div class="linea-form" id="linea-dni">
-                    <p>DNI: 11111111-Z </p>
-                    <input type="text" name="dni">
-                </div>
                 <div class="linea-form" id="linea-email">
                     <p>Email: jontom@gmail.com</p>
                     <input type="email" name="email">
