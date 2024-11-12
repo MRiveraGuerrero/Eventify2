@@ -31,17 +31,12 @@ CREATE TABLE `accesos` (
   `usuario` varchar(50) NOT NULL,
   `ip` varchar(50) NOT NULL,
   `intentos` int(11) DEFAULT NULL,
-  `fecha` date NOT NULL DEFAULT current_timestamp()
+  `fecha` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `accesos`
 --
-
-INSERT INTO `accesos` (`usuario`, `ip`, `intentos`, `fecha`) VALUES
-('antonin', '172.17.0.1', 5, '2023-11-08'),
-('jon', '172.17.0.1', 6, '2023-11-06'),
-('rodolfo', '172.17.0.1', 1, '2023-11-06');
 
 -- --------------------------------------------------------
 
@@ -173,7 +168,7 @@ CREATE TABLE `mensajes` (
   `usuarioA` varchar(50) NOT NULL,
   `usuarioB` varchar(50) NOT NULL,
   `mensaje` varchar(255) NOT NULL,
-  `fecha` date NOT NULL DEFAULT current_timestamp()
+  `fecha` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `mensajes`
