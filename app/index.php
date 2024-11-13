@@ -46,8 +46,8 @@
 
           $query = "SELECT e.*, 
           (SELECT COUNT(*) FROM comentarios c WHERE c.usuarioCreador = e.usuario AND c.tituloEv = e.titulo) as num_comentarios 
-          FROM eventos e WHERE e.usuario NOT IN (SELECT usuarioBloqueado FROM block WHERE usuarioBloqueador = '$usuarioActual')";
-
+          FROM eventos e WHERE e.usuario NOT IN (SELECT usuarioBloqueado FROM block WHERE usuarioBloqueador = '$usuario')";
+          
           switch($orden) {
               case 'likes':
                   $query .= " ORDER BY likes DESC";
