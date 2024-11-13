@@ -53,7 +53,8 @@ CREATE TABLE `eventos` (
   `opcion2` varchar(255) NOT NULL,
   `resultado2` varchar(255) NOT NULL,
   `likes` int(10) NOT NULL DEFAULT 0,
-  UNIQUE(`usuario`, `titulo`)
+  UNIQUE(`usuario`, `titulo`),
+  `fecha` TIMESTAMP NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -76,7 +77,8 @@ CREATE TABLE `usuarios` (
   `usuario` varchar(50) NOT NULL,
   `passwd` varchar(255) NOT NULL,
   `sal` varchar(50) NOT NULL,
-  UNIQUE(`usuario`)
+  UNIQUE(`usuario`),
+  `foto_perfil` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

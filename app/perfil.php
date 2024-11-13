@@ -98,6 +98,13 @@
                     <div class="form-title">
                         Mi Perfil
                     </div>
+                    <div class="profile-photo-container">
+                        <img id="profileImage" 
+                            src="' . (htmlspecialchars($row['foto_perfil'] ?? 'imagenes/default-profile.png', ENT_QUOTES)) . '" 
+                            alt="Foto de perfil">  
+                          <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                          <button type="button" id="changePhotoBtn" class="boton-foto">Cambiar foto</button>
+                    </div>
                     <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
                     <form class="form" action="/submit.php" id="form-registro" method="POST">
                         <div class="linea-form">

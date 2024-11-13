@@ -1,6 +1,36 @@
 window.onload = init 
 
 function init(){
+    document.getElementById("changePhotoBtn")?.addEventListener("click", function() {
+        document.getElementById("photoInput").click();
+    });
+
+    document.getElementById("photoInput")?.addEventListener("change", async function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('profile_photo', file);
+            formData.append('token', document.querySelector('input[name="token"]').value);
+
+            try {
+                const response = await fetch('/update_profile_photo.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById("profileImage").src = data.photo_url;
+                    alert('Foto de perfil actualizada con éxito');
+                } else {
+                    alert('Error al actualizar la foto de perfil');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al actualizar la foto de perfil');
+            }
+        }
+    });
     document.getElementById("botonPerfil").addEventListener("click", () => {
         event.preventDefault();
         var aceptado = true

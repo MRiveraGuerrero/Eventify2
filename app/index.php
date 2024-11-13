@@ -19,7 +19,17 @@
           <h1 class="tituloInicio">Inicio</h1>
           <img class="imagenWIP" src="imagenes/logoWIP.png" alt="Logo WIP">
         </div>
-        
+        <div class="ordenamiento">
+          <form method="GET" class="form-ordenamiento">
+              <label for="orden">Ordenar por:</label>
+              <select name="orden" id="orden" onchange="this.form.submit()">
+                  <option value="reciente" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'reciente') ? 'selected' : ''; ?>>Más recientes</option>
+                  <option value="likes" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'likes') ? 'selected' : ''; ?>>Más likes</option>
+                  <option value="alfabetico" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'alfabetico') ? 'selected' : ''; ?>>Alfabético</option>
+                  <option value="comentarios" <?php echo (isset($_GET['orden']) && $_GET['orden'] == 'comentarios') ? 'selected' : ''; ?>>Más comentados</option>
+              </select>
+          </form>
+        </div>
         <?php
           $hostname = "db";
           $username = "admin";
@@ -31,7 +41,30 @@
             die("Database connection failed: " . $conn->connect_error);
           }
 
-          $query = mysqli_query($conn, "SELECT * FROM eventos") or die(mysqli_error($conn));
+          // Aquí va el nuevo código de ordenamiento
+          $orden = isset($_GET['orden']) ? $_GET['orden'] : 'reciente';
+
+          $query = "SELECT e.*, 
+                    (SELECT COUNT(*) FROM comentarios c WHERE c.usuarioCreador = e.usuario AND c.tituloEv = e.titulo) as num_comentarios 
+                    FROM eventos e";
+
+          switch($orden) {
+              case 'likes':
+                  $query .= " ORDER BY likes DESC";
+                  break;
+              case 'alfabetico':
+                  $query .= " ORDER BY titulo ASC";
+                  break;
+              case 'comentarios':
+                  $query .= " ORDER BY num_comentarios DESC";
+                  break;
+              case 'reciente':
+              default:
+                  $query .= " ORDER BY fecha DESC";
+                  break;
+          }
+          $query = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
 
           while ($row = mysqli_fetch_array($query)) {
             $usuarioLikeado = false;
@@ -79,7 +112,6 @@
           }
           mysqli_close($conn);
         ?>
-
       </div>
       <script src="index.js"></script>
     </body>
