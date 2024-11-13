@@ -103,5 +103,45 @@
 
         </div>
       </div>
+
+      <div id="termsModal" class="modal">
+        <div class="modal-content">
+          <h2>Términos y Condiciones & Política de Privacidad</h2>
+          <div class="modal-body">
+            <h3>Términos y Condiciones</h3>
+            <p>Al crear una cuenta en Eventify, usted acepta los siguientes términos:</p>
+            <ul>
+              <li>Ser responsable de mantener la confidencialidad de su cuenta</li>
+              <li>No compartir contenido ilegal o inapropiado</li>
+              <li>No crear múltiples cuentas con el fin de abusar del sistema</li>
+              <li>Respetar a otros usuarios y sus contenidos</li>
+            </ul>
+
+            <h3>Política de Privacidad</h3>
+            <p>Recopilamos y procesamos los siguientes datos:</p>
+            <ul>
+              <li>Información de perfil (nombre, email, fecha de nacimiento)</li>
+              <li>Datos de uso del servicio</li>
+              <li>Información necesaria para la seguridad de la cuenta</li>
+            </ul>
+            <p>Sus datos están protegidos y solo se utilizan para:</p>
+            <ul>
+              <li>Proporcionar y mejorar nuestros servicios</li>
+              <li>Mantener la seguridad de su cuenta</li>
+              <li>Comunicarnos con usted sobre actualizaciones importantes</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <label class="consent-checkbox">
+              <input type="checkbox" id="termsConsent">
+              <span>He leído y acepto los términos y condiciones y la política de privacidad</span>
+            </label>
+            <div class="modal-buttons">
+              <button id="acceptTerms" class="boton" disabled>Aceptar</button>
+              <button id="declineTerms" class="boton">Rechazar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </body>
 </html>

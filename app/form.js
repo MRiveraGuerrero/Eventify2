@@ -6,34 +6,33 @@ function init() {
     var boton = document.getElementById("botonRegistro")
     boton.addEventListener("click", async (e) => {
         e.preventDefault();
-        var aceptado = true
-        var nombre = document.getElementsByName("nombre")[0]?.value
-        var telefono = document.getElementsByName("telefono")[0]?.value
-        var email = document.getElementsByName("email")[0]?.value
-        var nacimiento = document.getElementsByName("nacimiento")[0]?.value
-        var usuario = document.getElementsByName("usuario")[0]?.value
-        var passwd = document.getElementsByName("passwd")[0]?.value
+        var aceptado = true;
+        var nombre = document.getElementsByName("nombre")[0]?.value;
+        var telefono = document.getElementsByName("telefono")[0]?.value;
+        var email = document.getElementsByName("email")[0]?.value;
+        var nacimiento = document.getElementsByName("nacimiento")[0]?.value;
+        var usuario = document.getElementsByName("usuario")[0]?.value;
+        var passwd = document.getElementsByName("passwd")[0]?.value;
 
         if(document.getElementById("botonIniciar").innerHTML !== "Cambiar a Crear cuenta"){
-            aceptado = aceptado && comprobarNombre(nombre)
-
-            aceptado = aceptado && comprobarTelefono(telefono)
-
-            aceptado = aceptado && comprobarEmail(email)
-
-            aceptado = aceptado && comprobarNacimiento(nacimiento)
-
-            aceptado = aceptado && comprobarPasswd(passwd)
+            aceptado = aceptado && comprobarNombre(nombre);
+            aceptado = aceptado && comprobarTelefono(telefono);
+            aceptado = aceptado && comprobarEmail(email);
+            aceptado = aceptado && comprobarNacimiento(nacimiento);
+            aceptado = aceptado && comprobarPasswd(passwd);
         }
         
+        aceptado = aceptado && comprobarUsuario(usuario);
 
-        aceptado = aceptado && comprobarUsuario(usuario)
-
-        if(aceptado){
-            var form = document.getElementById("form-registro")
-            form.submit()
+        if(aceptado) {
+            if(document.getElementById("botonIniciar").innerHTML !== "Cambiar a Crear cuenta") {
+                showTermsModal();
+            } else {
+                var form = document.getElementById("form-registro");
+                form.submit();
+            }
         }
-    })
+    });
 
     var botonSesion = document.getElementById("botonIniciar")
     botonSesion.addEventListener("click", () => {
@@ -146,5 +145,28 @@ function comprobarUsuario(usuario) {
         return false
     }
   }
+
+function showTermsModal() {
+  const modal = document.getElementById("termsModal");
+  const acceptBtn = document.getElementById("acceptTerms");
+  const declineBtn = document.getElementById("declineTerms");
+  const consentCheckbox = document.getElementById("termsConsent");
+  const form = document.getElementById("form-registro");
+
+  modal.style.display = "block";
+
+  consentCheckbox.addEventListener("change", function() {
+    acceptBtn.disabled = !this.checked;
+  });
+
+  acceptBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+    form.submit();
+  });
+
+  declineBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+}
 
 
