@@ -45,8 +45,8 @@
           $orden = isset($_GET['orden']) ? $_GET['orden'] : 'reciente';
 
           $query = "SELECT e.*, 
-                    (SELECT COUNT(*) FROM comentarios c WHERE c.usuarioCreador = e.usuario AND c.tituloEv = e.titulo) as num_comentarios 
-                    FROM eventos e";
+          (SELECT COUNT(*) FROM comentarios c WHERE c.usuarioCreador = e.usuario AND c.tituloEv = e.titulo) as num_comentarios 
+          FROM eventos e WHERE e.usuario NOT IN (SELECT usuarioBloqueado FROM block WHERE usuarioBloqueador = '$usuarioActual')";
 
           switch($orden) {
               case 'likes':

@@ -61,44 +61,51 @@
                 <h1 class="tituloInicio">Perfil</h1>
                 <img class="imagenWIP" src="imagenes/logoWIP.png"></img>
               </div>';
-        $otro_usuario = $usuario;
-        if (isset($_GET["usuario"])) {
-          $otro_usuario = $_GET["usuario"];
-          $query = "SELECT * FROM usuarios WHERE usuario = ?";
-          $stmt = $conn->prepare($query);
-          $stmt->bind_param("s", $otro_usuario);
-          $stmt->execute();
-          $result = $stmt->get_result();
-          $stmt->close();
-          $querySeguidos = "SELECT COUNT(*) AS totalSeguidos FROM follows WHERE usuarioSeguidor = ?";
-          $querySeguidores = "SELECT COUNT(*) AS totalSeguidores FROM follows WHERE usuarioSeguido = ?";
+              $otro_usuario = $usuario;
+              if (isset($_GET["usuario"])) {
+                $otro_usuario = $_GET["usuario"];
+                $query = "SELECT * FROM usuarios WHERE usuario = ?";
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("s", $otro_usuario);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $stmt->close();
+                $querySeguidos = "SELECT COUNT(*) AS totalSeguidos FROM follows WHERE usuarioSeguidor = ?";
+                $querySeguidores = "SELECT COUNT(*) AS totalSeguidores FROM follows WHERE usuarioSeguido = ?";
+                
+                $stmtSeguidos = $conn->prepare($querySeguidos);
+                $stmtSeguidos->bind_param("s", $otro_usuario);
+                $stmtSeguidos->execute();
+                $resultSeguidos = $stmtSeguidos->get_result();
+                $seguidosCount = $resultSeguidos->fetch_assoc()['totalSeguidos'];
 
-          $stmtSeguidos = $conn->prepare($querySeguidos);
-          $stmtSeguidos->bind_param("s", $otro_usuario);
-          $stmtSeguidos->execute();
-          $resultSeguidos = $stmtSeguidos->get_result();
-          $seguidosCount = $resultSeguidos->fetch_assoc()['totalSeguidos'];
+                $stmtSeguidores = $conn->prepare($querySeguidores);
+                $stmtSeguidores->bind_param("s", $otro_usuario);
+                $stmtSeguidores->execute();
+                $resultSeguidores = $stmtSeguidores->get_result();
+                $seguidoresCount = $resultSeguidores->fetch_assoc()['totalSeguidores'];
 
+                // Verificar si está bloqueado
+                $isBlockedQuery = "SELECT * FROM block WHERE usuarioBloqueador = ? AND usuarioBloqueado = ?";
+                $stmtBlocked = $conn->prepare($isBlockedQuery);
+                $stmtBlocked->bind_param("ss", $usuario, $otro_usuario);
+                $stmtBlocked->execute();
+                $isBlockedResult = $stmtBlocked->get_result();
+                $isBlocked = $isBlockedResult->num_rows > 0;
+                $stmtBlocked->close();
 
-          
-          $stmtSeguidores = $conn->prepare($querySeguidores);
-          $stmtSeguidores->bind_param("s", $otro_usuario);
-          $stmtSeguidores->execute();
-          $resultSeguidores = $stmtSeguidores->get_result();
-          $seguidoresCount = $resultSeguidores->fetch_assoc()['totalSeguidores'];
+                // Verificar si sigue al otro usuario
+                $isFollowingQuery = "SELECT * FROM follows WHERE usuarioSeguidor = ? AND usuarioSeguido = ?";
+                $stmtFollowing = $conn->prepare($isFollowingQuery);
+                $stmtFollowing->bind_param("ss", $usuario, $otro_usuario);
+                $stmtFollowing->execute();
+                $isFollowingResult = $stmtFollowing->get_result();
+                $isFollowing = $isFollowingResult->num_rows > 0;
+                $stmtFollowing->close();
 
-          $stmtSeguidos->close();
-          $stmtSeguidores->close();
-          
-          $isFollowingQuery = "SELECT * FROM follows WHERE usuarioSeguidor = ? AND usuarioSeguido = ?";
-          $stmtFollowing = $conn->prepare($isFollowingQuery);
-          $stmtFollowing->bind_param("ss", $usuario, $otro_usuario);
-          $stmtFollowing->execute();
-          $isFollowingResult = $stmtFollowing->get_result();
-          $isFollowing = $isFollowingResult->num_rows > 0;
-          $stmtFollowing->close();
-
-          $followButtonText = $isFollowing ? "Dejar de Seguir" : "Seguir";
+                // Definir los textos para los botones
+                $followButtonText = $isFollowing ? "Dejar de Seguir" : "Seguir";
+                $blockButtonText = $isBlocked ? "Desbloquear" : "Bloquear";
 
           while ($row = $result->fetch_assoc()) {
             echo '<div class="formbox">
@@ -114,6 +121,9 @@
                         <div class="linea-form">
                             <button type="button" class="boton" id="botonSeguir">
                               Seguir<?php echo $followButtonText; ?>
+                            </button>
+                            <button type="button" class="boton" id="botonBloquear">
+                               Bloquear <?php echo $blockButtonText; ?>
                             </button>
                         </div>
                         <div class="linea-form">
@@ -284,6 +294,45 @@
 
         // Asocia el botón de seguir con la función
         document.getElementById("botonSeguir").addEventListener("click", toggleFollow);
+      </script>
+      <script>
+        // JavaScript para manejar el botón de seguir
+      function toggleBlock() {
+            const otro_usuario = "<?php echo $otro_usuario; ?>";
+            const usuarioBloqueador = "<?php echo $usuario; ?>";
+
+            // Verifica si los valores están correctamente definidos
+            console.log("usuarioBloqueador:", usuarioBloqueador, "usuarioBloqueado:", otro_usuario);
+
+            fetch("bloquear.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    usuarioBloqueador: usuarioBloqueador,
+                    usuarioBloqueado: otro_usuario
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const button = document.getElementById("botonBloquear");
+                    button.textContent = data.isBlocked ? "Desbloquear" : "Bloquear";
+                    location.reload();
+                } else {
+                    console.error("Error en el servidor:", data.message);
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error("Error en la solicitud:", error);
+                location.reload();
+            });
+        }
+
+        // Asocia el botón de seguir con la función
+        document.getElementById("botonBloquear").addEventListener("click", toggleBlock);
       </script>
       <script src="perfil.js"></script>
       <script src="index.js"></script>
