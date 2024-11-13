@@ -53,7 +53,7 @@ if (isset($_POST['titulo'])) {
         echo '
             <div class="formbox">
             <link rel="stylesheet" href="styles.css">
-            <link rel="stylesheet" href="perfil.css">
+            <link rel="stylesheet" href="editar.css">
                 <div class="form-title">
                     Edición de evento
                 </div>
