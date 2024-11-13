@@ -86,6 +86,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`nombre`, `telef`, `email`, `nacimiento`, `usuario`, `passwd`, `sal`) VALUES
+('invitado', 1, 'invitado', '2003-08-08', 'invitado', 'invitado', 'invitado'),
 ('ImanolMM', 684399392, 'imanolm.upv@gmail.com', '2003-08-08', 'ImanolMM', 'imanolMM', 'a');
 
 --
