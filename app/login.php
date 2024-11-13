@@ -111,25 +111,36 @@
             <h3>Términos y Condiciones</h3>
             <p>Al crear una cuenta en Eventify, usted acepta los siguientes términos:</p>
             <ul>
-              <li>Ser responsable de mantener la confidencialidad de su cuenta</li>
-              <li>No compartir contenido ilegal o inapropiado</li>
-              <li>No crear múltiples cuentas con el fin de abusar del sistema</li>
-              <li>Respetar a otros usuarios y sus contenidos</li>
+              <li>Es su responsabilidad mantener la confidencialidad de su cuenta, incluyendo su contraseña y demás credenciales.</li>
+              <li>Eventify no se hace responsable por cualquier pérdida o daño derivado del uso indebido de su cuenta.</li>
+              <li>No debe compartir contenido que sea ilegal, ofensivo, difamatorio, violento o que infrinja derechos de terceros.</li>
+              <li>Está prohibido crear múltiples cuentas con el propósito de manipular el sistema o evadir restricciones.</li>
+              <li>Debe respetar los derechos, contenido y privacidad de otros usuarios.</li>
+              <li>Eventify se reserva el derecho de suspender o eliminar su cuenta en caso de incumplimiento de estas condiciones.</li>
+              <li>Los servicios de Eventify se proporcionan "tal cual", sin garantías explícitas o implícitas sobre su disponibilidad, funcionalidad o resultados.</li>
+              <li>Nos reservamos el derecho de modificar estos términos en cualquier momento; cualquier cambio se comunicará oportunamente a los usuarios registrados.</li>
             </ul>
 
             <h3>Política de Privacidad</h3>
-            <p>Recopilamos y procesamos los siguientes datos:</p>
+            <p>En cumplimiento de la RGPD y la LSSI, Eventify recopila y procesa los siguientes datos personales:</p>
             <ul>
-              <li>Información de perfil (nombre, email, fecha de nacimiento)</li>
-              <li>Datos de uso del servicio</li>
-              <li>Información necesaria para la seguridad de la cuenta</li>
+              <li><strong>Nombre</strong>: utilizado para identificar al usuario.</li>
+              <li><strong>Teléfono</strong>: usado para comunicaciones relacionadas con el servicio y medidas de seguridad.</li>
+              <li><strong>Correo electrónico</strong>: utilizado para contacto, notificaciones y recuperación de la cuenta.</li>
+              <li><strong>Fecha de nacimiento</strong>: usada para verificar la edad y ofrecer una experiencia personalizada.</li>
+              <li><strong>Nombre de usuario</strong>: identificador único para acceder a la plataforma.</li>
+              <li><strong>Contraseña</strong>: almacenada de forma segura con técnicas de cifrado, junto con una sal única para cada usuario.</li>
+              <li><strong>Dirección IP</strong>: recopilada al iniciar sesión para mejorar la seguridad y detectar accesos sospechosos.</li>
+              <li><strong>Historial de accesos</strong>: registra intentos de inicio de sesión, incluyendo fecha y hora.</li>
             </ul>
-            <p>Sus datos están protegidos y solo se utilizan para:</p>
+            <p>Sus datos personales serán utilizados exclusivamente para:</p>
             <ul>
-              <li>Proporcionar y mejorar nuestros servicios</li>
-              <li>Mantener la seguridad de su cuenta</li>
-              <li>Comunicarnos con usted sobre actualizaciones importantes</li>
+              <li>Proporcionar y mejorar los servicios ofrecidos por Eventify.</li>
+              <li>Garantizar la seguridad y el correcto funcionamiento de la plataforma.</li>
+              <li>Enviar notificaciones importantes, como actualizaciones del servicio o cambios en los términos.</li>
+              <li>Cumplir con nuestras obligaciones legales o requerimientos regulatorios.</li>
             </ul>
+            <p>Sus derechos incluyen el acceso, rectificación, eliminación, portabilidad y limitación del tratamiento de sus datos, los cuales puede ejercer contactándonos en el correo <strong>mikelrg2003@gmail.com</strong>.</p>
           </div>
           <div class="modal-footer">
             <label class="consent-checkbox">
@@ -140,7 +151,8 @@
               <button id="acceptTerms" class="boton" disabled>Aceptar</button>
               <button id="declineTerms" class="boton">Rechazar</button>
             </div>
-          </div>
+        </div>
+
         </div>
       </div>
     </body>
