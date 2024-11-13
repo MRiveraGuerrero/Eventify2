@@ -123,9 +123,9 @@
                         <select name="chat_with" onchange="this.form.submit()">
                             <option value="">Seleccionar usuario</option>
                             <?php
-                                $query = "SELECT usuario FROM usuarios WHERE usuario != ?";
+                                $query = "SELECT usuario FROM usuarios WHERE usuario != ? AND usuario NOT IN (SELECT usuarioBloqueado FROM block WHERE usuarioBloqueador = ?)";
                                 $stmt = $conn->prepare($query);
-                                $stmt->bind_param("s", $usuario);
+                                $stmt->bind_param("ss", $usuario, $usuario);
                                 $stmt->execute();
                                 $result = $stmt->get_result();
                                 
