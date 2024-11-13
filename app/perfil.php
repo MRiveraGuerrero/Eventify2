@@ -39,12 +39,6 @@
           $usuario = "invitado";
         }
 
-        $query = "SELECT * FROM usuarios WHERE usuario = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $usuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
         include("navbar.php");
         echo '<!DOCTYPE html>
         <html>
@@ -64,57 +58,169 @@
             <div class="page">
               <div class="cabecera">
                 <img class="imagenSV" src="imagenes/logoSV.png"></img>
-                <h1 class="tituloInicio">Editar Perfil</h1>
+                <h1 class="tituloInicio">Perfil</h1>
                 <img class="imagenWIP" src="imagenes/logoWIP.png"></img>
               </div>';
-        while ($row = $result->fetch_assoc()) {
-          echo '<div class="formbox">
-                  <div class="form-title">
-                      Mi Perfil
-                  </div>
-                  <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
-                  <form class="form" action="/submit.php" id="form-registro" method="POST">
-                      <div class="linea-form">
-                          <p>Nombre de usuario: '.htmlspecialchars($row['usuario'], ENT_QUOTES).'</p>
-                      </div>
-                      <div class="linea-form">
-                          <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
-                          <input type="text" name="nombre" value="'.htmlspecialchars($row['nombre'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
-                          <input type="text" name="telefono" value="'.htmlspecialchars($row['telef'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>DNI: '.htmlspecialchars($row['dni'], ENT_QUOTES).' </p>
-                          <input type="text" name="dni" value="'.htmlspecialchars($row['dni'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>
-                          <input type="email" name="email" value="'.htmlspecialchars($row['email'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Nacimiento: '.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'</p>
-                          <input type="date" name="nacimiento" value="'.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'">
-                      </div>
-                      <div class="linea-form">
-                          <p>Contraseña </p>
-                          <input type="password" name="passwd" value="">
-                      </div>
-                      <div class="linea-form">
-                          <input type="hidden" value="edit" name="tiporegistro">
-                          <p>
-                          <button type="submit" class="boton" id="botonPerfil">Editar</button>
-                          </p>                  
-                      </div>
-                      <input type="hidden" name="token" value="'.$_SESSION['token'].'">
-                  </form>
-              </div>';
+        $otro_usuario = $usuario;
+        if (isset($_GET["usuario"])) {
+          $otro_usuario = $_GET["usuario"];
+          $query = "SELECT * FROM usuarios WHERE usuario = ?";
+          $stmt = $conn->prepare($query);
+          $stmt->bind_param("s", $otro_usuario);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $stmt->close();
+          $querySeguidos = "SELECT COUNT(*) AS totalSeguidos FROM follows WHERE usuarioSeguidor = ?";
+          $querySeguidores = "SELECT COUNT(*) AS totalSeguidores FROM follows WHERE usuarioSeguido = ?";
+
+          $stmtSeguidos = $conn->prepare($querySeguidos);
+          $stmtSeguidos->bind_param("s", $otro_usuario);
+          $stmtSeguidos->execute();
+          $resultSeguidos = $stmtSeguidos->get_result();
+          $seguidosCount = $resultSeguidos->fetch_assoc()['totalSeguidos'];
+
+
+          
+          $stmtSeguidores = $conn->prepare($querySeguidores);
+          $stmtSeguidores->bind_param("s", $otro_usuario);
+          $stmtSeguidores->execute();
+          $resultSeguidores = $stmtSeguidores->get_result();
+          $seguidoresCount = $resultSeguidores->fetch_assoc()['totalSeguidores'];
+
+          $stmtSeguidos->close();
+          $stmtSeguidores->close();
+          
+          $isFollowingQuery = "SELECT * FROM follows WHERE usuarioSeguidor = ? AND usuarioSeguido = ?";
+          $stmtFollowing = $conn->prepare($isFollowingQuery);
+          $stmtFollowing->bind_param("ss", $usuario, $otro_usuario);
+          $stmtFollowing->execute();
+          $isFollowingResult = $stmtFollowing->get_result();
+          $isFollowing = $isFollowingResult->num_rows > 0;
+          $stmtFollowing->close();
+
+          $followButtonText = $isFollowing ? "Dejar de Seguir" : "Seguir";
+
+          while ($row = $result->fetch_assoc()) {
+            echo '<div class="formbox">
+                    <div class="form-title">
+                        Perfil de '.htmlspecialchars($row['usuario'], ENT_QUOTES). '
+                    </div>
+                    <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
+                    <form class="form">
+                        <div class="contador-seguimiento" style="display: flex; justify-content: space-between; width: 100%;">
+                          <p>Personas que sigue: ' . htmlspecialchars($seguidosCount, ENT_QUOTES) . '</p>
+                          <p>Seguidores: ' . htmlspecialchars($seguidoresCount, ENT_QUOTES) . '</p>
+                        </div>
+                        <div class="linea-form">
+                            <button type="button" class="boton" id="botonSeguir">
+                              Seguir<?php echo $followButtonText; ?>
+                            </button>
+                        </div>
+                        <div class="linea-form">
+                            <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Nacimiento: '.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'</p>
+                        </div>
+                    </form>
+                </div>';
+          }
+          $result->free();
+          
+        } else {
+          $query = "SELECT * FROM usuarios WHERE usuario = ?";
+          $stmt = $conn->prepare($query);
+          $stmt->bind_param("s", $usuario);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $querySeguidos = "SELECT COUNT(*) AS totalSeguidos FROM follows WHERE usuarioSeguidor = ?";
+          $querySeguidores = "SELECT COUNT(*) AS totalSeguidores FROM follows WHERE usuarioSeguido = ?";
+
+          $stmtSeguidos = $conn->prepare($querySeguidos);
+          $stmtSeguidos->bind_param("s", $otro_usuario);
+          $stmtSeguidos->execute();
+          $resultSeguidos = $stmtSeguidos->get_result();
+          $seguidosCount = $resultSeguidos->fetch_assoc()['totalSeguidos'];
+
+
+          
+          $stmtSeguidores = $conn->prepare($querySeguidores);
+          $stmtSeguidores->bind_param("s", $otro_usuario);
+          $stmtSeguidores->execute();
+          $resultSeguidores = $stmtSeguidores->get_result();
+          $seguidoresCount = $resultSeguidores->fetch_assoc()['totalSeguidores'];
+
+          $stmtSeguidos->close();
+          $stmtSeguidores->close();
+          while ($row = $result->fetch_assoc()) {
+            echo '<div class="formbox">
+                    <div class="form-title">
+                        Mi Perfil
+                    </div>
+                    <div class="profile-photo-container">
+                        <img id="profileImage" 
+                            src="' . (htmlspecialchars($row['foto_perfil'] ?? 'imagenes/default-profile.png', ENT_QUOTES)) . '" 
+                            alt="Foto de perfil">  
+                          <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                          <button type="button" id="changePhotoBtn" class="boton-foto">Cambiar foto</button>
+                    </div>
+                    <div>
+-                     <a class="boton" href="/chat.php?chat_with='.htmlspecialchars($row['usuario'], ENT_QUOTES).'">Enviar mensaje</a>
+-                   </div>
+                    <div class="contador-seguimiento">
+                      <p>Personas que sigue: ' . htmlspecialchars($seguidosCount, ENT_QUOTES) . '</p>
+                       <p style="padding: 15px;">
+                      <p>Seguidores: ' . htmlspecialchars($seguidoresCount, ENT_QUOTES) . '</p>
+                    </div>
+                    <!-- Alinear inputs https://stackoverflow.com/questions/4309950/how-to-align-input-forms-in-html -->
+                    <form class="form" action="/submit.php" id="form-registro" method="POST">
+                        <div class="linea-form">
+                            <p>Nombre de usuario: '.htmlspecialchars($row['usuario'], ENT_QUOTES).'</p>
+                        </div>
+                        <div class="linea-form">
+                            <p>Nombre y Apellidos: '.htmlspecialchars($row['nombre'], ENT_QUOTES).'</p>
+                            <input type="text" name="nombre" value="'.htmlspecialchars($row['nombre'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Teléfono: '.htmlspecialchars($row['telef'], ENT_QUOTES).'</p>
+                            <input type="text" name="telefono" value="'.htmlspecialchars($row['telef'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Email: '.htmlspecialchars($row['email'], ENT_QUOTES).'</p>
+                            <input type="email" name="email" value="'.htmlspecialchars($row['email'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Nacimiento: '.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'</p>
+                            <input type="date" name="nacimiento" value="'.htmlspecialchars($row['nacimiento'], ENT_QUOTES).'">
+                        </div>
+                        <div class="linea-form">
+                            <p>Contraseña </p>
+                            <input type="password" name="passwd" value="">
+                        </div>
+                        <div class="linea-form">
+                            <input type="hidden" value="edit" name="tiporegistro">
+                            <input type="hidden" value="false" id="eliminar" name="eliminar">
+                            <p>
+                            <button type="submit" class="boton" id="botonPerfil">Editar</button>
+                            <button type="submit" class="eliminar" id="botonEliminar">Eliminar</button>
+                            </p>                  
+                        </div>
+                        <input type="hidden" name="token" value="'.$_SESSION['token'].'">
+                    </form>
+                </div>';
+          }
         }
+
 
         $query = "SELECT * FROM eventos WHERE usuario = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $usuario);
+        $stmt->bind_param("s", $otro_usuario);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -140,7 +246,48 @@
         $stmt->close();
         $conn->close();
       ?>
+      <script>
+        // JavaScript para manejar el botón de seguir
+        function toggleFollow() {
+            const otro_usuario = "<?php echo $otro_usuario; ?>";
+            const usuarioSeguidor = "<?php echo $usuario; ?>";
+
+            // Verifica si los valores están correctamente definidos
+            console.log("usuarioSeguidor:", usuarioSeguidor, "usuarioSeguido:", otro_usuario);
+
+            fetch("seguir.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    usuarioSeguidor: usuarioSeguidor,
+                    usuarioSeguido: otro_usuario
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const button = document.getElementById("botonSeguir");
+                    button.textContent = data.isFollowing ? "Dejar de Seguir" : "Seguir";
+                    location.reload();
+                } else {
+                    console.error("Error en el servidor:", data.message);
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error("Error en la solicitud:", error);
+                location.reload();
+            });
+        }
+
+        // Asocia el botón de seguir con la función
+        document.getElementById("botonSeguir").addEventListener("click", toggleFollow);
+      </script>
       <script src="perfil.js"></script>
+      <script src="index.js"></script>
+
     </div>
   </body>
 </html>

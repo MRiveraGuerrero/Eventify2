@@ -6,37 +6,33 @@ function init() {
     var boton = document.getElementById("botonRegistro")
     boton.addEventListener("click", async (e) => {
         e.preventDefault();
-        var aceptado = true
-        var nombre = document.getElementsByName("nombre")[0]?.value
-        var telefono = document.getElementsByName("telefono")[0]?.value
-        var dni = document.getElementsByName("dni")[0]?.value
-        var email = document.getElementsByName("email")[0]?.value
-        var nacimiento = document.getElementsByName("nacimiento")[0]?.value
-        var usuario = document.getElementsByName("usuario")[0]?.value
-        var passwd = document.getElementsByName("passwd")[0]?.value
+        var aceptado = true;
+        var nombre = document.getElementsByName("nombre")[0]?.value;
+        var telefono = document.getElementsByName("telefono")[0]?.value;
+        var email = document.getElementsByName("email")[0]?.value;
+        var nacimiento = document.getElementsByName("nacimiento")[0]?.value;
+        var usuario = document.getElementsByName("usuario")[0]?.value;
+        var passwd = document.getElementsByName("passwd")[0]?.value;
 
         if(document.getElementById("botonIniciar").innerHTML !== "Cambiar a Crear cuenta"){
-            aceptado = aceptado && comprobarNombre(nombre)
-
-            aceptado = aceptado && comprobarTelefono(telefono)
-
-            aceptado = aceptado && validarDNI(dni)
-
-            aceptado = aceptado && comprobarEmail(email)
-
-            aceptado = aceptado && comprobarNacimiento(nacimiento)
-
-            aceptado = aceptado && comprobarPasswd(passwd)
+            aceptado = aceptado && comprobarNombre(nombre);
+            aceptado = aceptado && comprobarTelefono(telefono);
+            aceptado = aceptado && comprobarEmail(email);
+            aceptado = aceptado && comprobarNacimiento(nacimiento);
+            aceptado = aceptado && comprobarPasswd(passwd);
         }
         
+        aceptado = aceptado && comprobarUsuario(usuario);
 
-        aceptado = aceptado && comprobarUsuario(usuario)
-
-        if(aceptado){
-            var form = document.getElementById("form-registro")
-            form.submit()
+        if(aceptado) {
+            if(document.getElementById("botonIniciar").innerHTML !== "Cambiar a Crear cuenta") {
+                showTermsModal();
+            } else {
+                var form = document.getElementById("form-registro");
+                form.submit();
+            }
         }
-    })
+    });
 
     var botonSesion = document.getElementById("botonIniciar")
     botonSesion.addEventListener("click", () => {
@@ -44,7 +40,6 @@ function init() {
 
         var nombre = document.getElementById("linea-nombre")
         var telefono = document.getElementById("linea-telefono")
-        var dni = document.getElementById("linea-dni")
         var email = document.getElementById("linea-email")
         var nacimiento = document.getElementById("linea-nacimiento")
         var tipo = document.getElementsByName("tiporegistro")[0]
@@ -61,7 +56,6 @@ function init() {
             botonSesion.innerHTML = "Cambiar a Crear cuenta"
             nombre.style.display = "none"
             telefono.style.display = "none"
-            dni.style.display = "none"
             email.style.display = "none"
             nacimiento.style.display = "none"
             tipo.value = "signin" // iniciar sesión
@@ -73,7 +67,6 @@ function init() {
             passwd.innerHTML = "Contraseña: asd$27"
             nombre.style.display = "table-row"
             telefono.style.display = "table-row"
-            dni.style.display = "table-row"
             email.style.display = "table-row"
             nacimiento.style.display = "table-row"
             tipo.value = "signup" // Crear cuenta
@@ -143,34 +136,7 @@ function comprobarUsuario(usuario) {
         return false
     }
 }
-
-function validarDNI(dni) {
-    // Expresión regular para validar el formato correcto del DNI
-    const dniRegex = /^(\d{8})-([A-Z])$/;
   
-    // Verificar si el DNI coincide con el formato esperado
-    if (!dniRegex.test(dni)) {
-        alert("Formato de DNI no válido")
-        return false;
-    }
-  
-    // Extraer el número y la letra del DNI
-    const [, numero, letra] = dni.match(dniRegex);
-  
-    // Array con las letras posibles en un DNI
-    const letrasPosibles = 'TRWAGMYFPDXBNJZSQVHLCKE';
-  
-    // Calcular la letra correcta según el número
-    const letraCalculada = letrasPosibles[numero % 23];
-  
-    // Comparar la letra calculada con la letra proporcionada
-    if(letra !== letraCalculada){
-        alert("La letra del DNI no es correcta")
-    }
-    return letra === letraCalculada;
-  }
-  
-
   function comprobarPasswd(passwd){
     if(passwd.length > 0){
         return true
@@ -179,5 +145,28 @@ function validarDNI(dni) {
         return false
     }
   }
+
+function showTermsModal() {
+  const modal = document.getElementById("termsModal");
+  const acceptBtn = document.getElementById("acceptTerms");
+  const declineBtn = document.getElementById("declineTerms");
+  const consentCheckbox = document.getElementById("termsConsent");
+  const form = document.getElementById("form-registro");
+
+  modal.style.display = "block";
+
+  consentCheckbox.addEventListener("change", function() {
+    acceptBtn.disabled = !this.checked;
+  });
+
+  acceptBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+    form.submit();
+  });
+
+  declineBtn.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+}
 
 

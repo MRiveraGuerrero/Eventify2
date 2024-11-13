@@ -92,15 +92,76 @@
     display: none;
 }
 
-#linea-dni{
-    display: none;
-}
-
 #linea-email{
     display: none;
 }
 
 #linea-nacimiento{
     display: none;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: var(--color1);
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-body {
+  margin: 20px 0;
+  font-family: var(--font-family);
+}
+
+.modal-body h3 {
+  color: var(--color2);
+  margin-top: 20px;
+}
+
+.modal-body ul {
+  margin-left: 20px;
+}
+
+.modal-body li {
+  margin: 10px 0;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.consent-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-family: var(--font-family);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal-buttons .boton[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 

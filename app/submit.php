@@ -65,32 +65,6 @@
         }
     }
     
-    function validarDNI($dni) {
-        // Expresión regular para validar el formato correcto del DNI
-        $dniRegex = '/^(\d{8})-([A-Z])$/';
-    
-        // Verificar si el DNI coincide con el formato esperado
-        if (!preg_match($dniRegex, $dni, $matches)) {
-            return false;
-        }
-    
-        // Extraer el número y la letra del DNI
-        list(, $numero, $letra) = $matches;
-    
-        // Array con las letras posibles en un DNI
-        $letrasPosibles = 'TRWAGMYFPDXBNJZSQVHLCKE';
-    
-        // Calcular la letra correcta según el número
-        $letraCalculada = $letrasPosibles[$numero % 23];
-    
-        // Comparar la letra calculada con la letra proporcionada
-        if ($letra !== $letraCalculada) {
-            return false;
-        }
-        
-        return $letra === $letraCalculada;
-    }
-    
     function comprobarPasswd($passwd) {
         if (strlen($passwd) > 0) {
             return true;
@@ -116,7 +90,6 @@
 
         $nombre = $_POST["nombre"];
         $telef = $_POST["telefono"];
-        $dni = $_POST["dni"];
         $email = $_POST["email"];
         $nacimiento = $_POST["nacimiento"];
         $usuario = $_POST["usuario"];
@@ -165,21 +138,18 @@
             }elseif (!comprobarUsuario($usuario)){
                 $error = true;
                 $motivo = "Usuario no válido";
-            }elseif (!validarDNI($dni)){
-                $error = true;
-                $motivo = "DNI no válido";
             }elseif (!comprobarPasswd($passwd)){
                 $error = true;
                 $motivo = "Contraseña no válida";
             }
 
             if (!$error){
-                $consulta = "INSERT INTO usuarios(nombre,telef,dni,email,nacimiento,usuario,passwd,sal) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                $consulta = "INSERT INTO usuarios(nombre,telef,email,nacimiento,usuario,passwd,sal) VALUES(?, ?, ?, ?, ?, ?, ?)";
                 $sal = bin2hex(random_bytes(16));
                 $contraseñaSal = $sal . $passwd;
                 $contraseña = password_hash($contraseñaSal, PASSWORD_BCRYPT);
-                $tipos = "sissssss";
-                $parametros = array($nombre, (int) $telef, $dni, $email, $nacimiento, $usuario, $contraseña, $sal);
+                $tipos = "sisssss";
+                $parametros = array($nombre, (int) $telef, $email, $nacimiento, $usuario, $contraseña, $sal);
                 
                 if($stmt = mysqli_prepare($conn, $consulta)){
                     $stmt->bind_param($tipos, ...$parametros);
@@ -267,9 +237,6 @@
                     }elseif (!comprobarNacimiento($nacimiento)){
                         $error = true;
                         $motivo = "Fecha de nacimiento no válida";
-                    }elseif (!validarDNI($dni)){
-                        $error = true;
-                        $motivo = "DNI no válido";
                     }elseif (!comprobarPasswd($passwd)){
                         $error = true;
                         $motivo = "Contraseña no válida";
@@ -277,23 +244,41 @@
                     if (!$error){
                         $viejoUsuario = getUsuarioCookie();
 
-                        $consulta = "UPDATE usuarios SET nombre = ?, telef = ?, dni = ?, email = ?, nacimiento = ?, passwd = ?, sal = ? WHERE usuario = ?";
-                        $tipos = "sissssss";
-                        $sal = bin2hex(random_bytes(16));
-                        $contraseñaSal = $sal . $passwd;
-                        $contraseña = password_hash($contraseñaSal, PASSWORD_BCRYPT);
-                        $parametros = array($nombre, (int) $telef, $dni, $email, $nacimiento, $contraseña, $sal, $viejoUsuario);
-                        if($stmt = mysqli_prepare($conn, $consulta)){
-                            $stmt->bind_param($tipos, ...$parametros);
-                            if($stmt->execute()){
+                        $eliminar = $_POST["eliminar"];
+                        if ($eliminar == 'true') {
+                            $consulta = "DELETE FROM usuarios WHERE usuario = ?";
+                            $tipos = "s";
+                            $parametros = array($viejoUsuario);
+                            if($stmt = mysqli_prepare($conn, $consulta)){
+                                $stmt->bind_param($tipos, ...$parametros);
+                                if($stmt->execute()){
 
-                                $mensaje = "Usuario editado";
-                                setCookieUsuarioSegura($viejoUsuario);
+                                    header('Location: /logout.php');
+                                    die();
+                                } 
+                                else $mensaje = "Error al eliminar";
+                                $stmt->close();
+                            }
+                        } else {
+                            $consulta = "UPDATE usuarios SET nombre = ?, telef = ?, email = ?, nacimiento = ?, passwd = ?, sal = ? WHERE usuario = ?";
+                            $tipos = "sisssss";
+                            $sal = bin2hex(random_bytes(16));
+                            $contraseñaSal = $sal . $passwd;
+                            $contraseña = password_hash($contraseñaSal, PASSWORD_BCRYPT);
+                            $parametros = array($nombre, (int) $telef, $email, $nacimiento, $contraseña, $sal, $viejoUsuario);
+                            if($stmt = mysqli_prepare($conn, $consulta)){
+                                $stmt->bind_param($tipos, ...$parametros);
+                                if($stmt->execute()){
 
-                            } 
-                            else $mensaje = "Error al editar";
-                            $stmt->close();
+                                    $mensaje = "Usuario editado";
+                                    setCookieUsuarioSegura($viejoUsuario);
+
+                                } 
+                                else $mensaje = "Error al editar";
+                                $stmt->close();
+                            }
                         }
+
                     }else{
                         $ipAddress = $_SERVER['REMOTE_ADDR'];
                         logFailedSignUpAttempt($usuario, $ipAddress, $motivo, "edit");

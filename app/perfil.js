@@ -1,12 +1,41 @@
 window.onload = init 
 
 function init(){
+    document.getElementById("changePhotoBtn")?.addEventListener("click", function() {
+        document.getElementById("photoInput").click();
+    });
+
+    document.getElementById("photoInput")?.addEventListener("change", async function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('profile_photo', file);
+            formData.append('token', document.querySelector('input[name="token"]').value);
+
+            try {
+                const response = await fetch('/update_profile_photo.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById("profileImage").src = data.photo_url;
+                    alert('Foto de perfil actualizada con éxito');
+                } else {
+                    alert('Error al actualizar la foto de perfil');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al actualizar la foto de perfil');
+            }
+        }
+    });
     document.getElementById("botonPerfil").addEventListener("click", () => {
         event.preventDefault();
         var aceptado = true
         var nombre = document.getElementsByName("nombre")[0]?.value
         var telefono = document.getElementsByName("telefono")[0]?.value
-        var dni = document.getElementsByName("dni")[0]?.value
         var email = document.getElementsByName("email")[0]?.value
         var nacimiento = document.getElementsByName("nacimiento")[0]?.value
         var usuario = document.getElementsByName("usuario")[0]?.value
@@ -15,8 +44,6 @@ function init(){
         aceptado = aceptado && comprobarNombre(nombre)
 
         aceptado = aceptado && comprobarTelefono(telefono)
-
-        aceptado = aceptado && validarDNI(dni)
 
         aceptado = aceptado && comprobarEmail(email)
 
@@ -31,6 +58,13 @@ function init(){
             var form = document.getElementById("form-registro")
             form.submit()
         }
+    })
+    document.getElementById("botonEliminar").addEventListener("click", () => {
+        event.preventDefault();
+        var eliminar = document.getElementById("eliminar")
+        eliminar.value = true
+        var form = document.getElementById("form-registro")
+        form.submit()
     })
 }
 
@@ -94,32 +128,6 @@ function init(){
         alert("El usuario debe incluir solo números y letras")
         return false
     }
-    }
-
-    function validarDNI(dni) {
-    // Expresión regular para validar el formato correcto del DNI
-    const dniRegex = /^(\d{8})-([A-Z])$/;
-
-    // Verificar si el DNI coincide con el formato esperado
-    if (!dniRegex.test(dni)) {
-        alert("Formato de DNI no válido")
-        return false;
-    }
-
-    // Extraer el número y la letra del DNI
-    const [, numero, letra] = dni.match(dniRegex);
-
-    // Array con las letras posibles en un DNI
-    const letrasPosibles = 'TRWAGMYFPDXBNJZSQVHLCKE';
-
-    // Calcular la letra correcta según el número
-    const letraCalculada = letrasPosibles[numero % 23];
-
-    // Comparar la letra calculada con la letra proporcionada
-    if(letra !== letraCalculada){
-        alert("La letra del DNI no es correcta")
-    }
-    return letra === letraCalculada;
     }
 
 
