@@ -1,3 +1,6 @@
+# Docs
+[Google Drive](https://drive.google.com/drive/folders/1gwj_1JCwaeasd_a4QrthVIfOb-2m5Ynl?usp=drive_link)
+
 # Integrantes 
 Ander Gorocica, Mikel Rivera, Diego Nido, Unax Zardoya
 
@@ -9,12 +12,6 @@ Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enable
 If this is the first time you are using this, you must build "web" (docker image) first
 ```bash
 $ docker build -t="web" .
-```
-
-Assign permissions and owner to "app" folder to store security logs (required)
-```bash
-$ chmod -R 755 app
-$ chown -R www-data:www-data app
 ```
 
 Enter the following command to start your containers:
