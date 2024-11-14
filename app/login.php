@@ -111,6 +111,7 @@
             <h3>Términos y Condiciones</h3>
             <p>Al crear una cuenta en Eventify, usted acepta los siguientes términos:</p>
             <ul>
+              <li>Usted es mayor de edad</li>
               <li>Es su responsabilidad mantener la confidencialidad de su cuenta, incluyendo su contraseña y demás credenciales.</li>
               <li>Eventify no se hace responsable por cualquier pérdida o daño derivado del uso indebido de su cuenta.</li>
               <li>No debe compartir contenido que sea ilegal, ofensivo, difamatorio, violento o que infrinja derechos de terceros.</li>
